@@ -65,6 +65,20 @@ export class TelegramService implements OnModuleInit {
       return this.sendQuestion(ctx, user, questions[0]);
     });
 
+    this.bot.command('history', async ctx => {
+      const tgId = String(ctx.from.id);
+      const user = await this.ensureUser(tgId);
+      const results = await this.trRepo.find({ where: { user: { id: user.id } }, relations: ['user'], order: { createdAt: 'DESC' } });
+      if (!results.length) {
+        return ctx.reply('История пуста — пройдите тест хотя бы раз (/test).');
+      }
+      let text = 'Ваша история результатов:\n\n';
+      for (const r of results) {
+        text += `${r.createdAt.toLocaleString()} — ${r.profession}\n`;
+      }
+      return ctx.reply(text);
+    });
+
     // generic text handler for registration and test flow
     this.bot.on('text', async ctx => {
       const tgId = String(ctx.from.id);
@@ -153,20 +167,6 @@ export class TelegramService implements OnModuleInit {
       } else {
         await ctx.answerCbQuery('Неизвестное действие');
       }
-    });
-
-    this.bot.command('history', async ctx => {
-      const tgId = String(ctx.from.id);
-      const user = await this.ensureUser(tgId);
-      const results = await this.trRepo.find({ where: { user: { id: user.id } }, relations: ['user'], order: { createdAt: 'DESC' } });
-      if (!results.length) {
-        return ctx.reply('История пуста — пройдите тест хотя бы раз (/test).');
-      }
-      let text = 'Ваша история результатов:\n\n';
-      for (const r of results) {
-        text += `${r.createdAt.toLocaleString()} — ${r.profession}\n`;
-      }
-      return ctx.reply(text);
     });
 
     // seed questions if empty
