@@ -29,13 +29,10 @@ git clone <URL_твоего_репо>
 cd <имя_папки>
 Устанавливаем зависимости:
 
-Копировать код
 npm install
-Если добавляли новые пакеты, они должны быть в package.json и попадут в npm install.
 
 Создаём .env с настройками бота (пример):
 
-Копировать код
 TELEGRAM_BOT_TOKEN=<твой_токен>
 DATABASE_URL=<url_к_базе_данных>
 NODE_ENV=development
