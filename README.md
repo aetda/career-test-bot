@@ -43,9 +43,6 @@ PORT=3000
 ### режим разработки
 npm run start:dev
 
-### продакшн
-npm run start:prod
-
 ## Использование
   1 В Telegram найти бота и нажать /start
 
